@@ -6,12 +6,12 @@
 
 ## 🎯 Fonctionnalités
 
-✅ **Identifiants uniques** : Chaque utilisateur reçoit un ID aléatoire (4 lettres + 4 chiffres) stocké dans un cookie.
-✅ **Communication en temps réel** : Transmission instantanée des "beeps" via WebSocket.
-✅ **Gestion des appuis** : La durée des appuis (courts ou longs) est mesurée et retransmise.
-✅ **Rafraîchissement de l'ID** : Possibilité de régénérer un nouvel ID aléatoire à tout moment.
-✅ **Design moderne et responsive** : Interface intuitive adaptée aux mobiles, tablettes et ordinateurs.
-✅ **Hébergement local** : Conçu pour être hébergé sur un PC avec tunneling (ngrok, Cloudflare Tunnel).
+✅ **Identifiants uniques** : Chaque utilisateur reçoit un ID aléatoire (4 lettres + 4 chiffres) stocké dans un cookie. <br>
+✅ **Communication en temps réel** : Transmission instantanée des "beeps" via WebSocket. <br>
+✅ **Gestion des appuis** : La durée des appuis (courts ou longs) est mesurée et retransmise. <br>
+✅ **Rafraîchissement de l'ID** : Possibilité de régénérer un nouvel ID aléatoire à tout moment. <br>
+✅ **Design moderne et responsive** : Interface intuitive adaptée aux mobiles, tablettes et ordinateurs. <br>
+✅ **Hébergement local** : Conçu pour être hébergé sur un PC avec tunneling (ngrok, Cloudflare Tunnel). <br>
 
 ---
 
