@@ -27,6 +27,9 @@
 
 ---
 
+## Capture d'image
+![beep-talkie screenshot](https://github.com/damballah/beep-talkie/blob/main/screenshot/beep-talkie-screenshot.jpg)
+
 ## 📦 Prérequis
 
 - Python 3.11+
