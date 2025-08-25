@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beep Talkie</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1><i class="fas fa-bullhorn"></i> Beep Talkie</h1>
+        <div class="user-id-container">
+            <div class="user-id">
+                <span>Votre ID : </span>
+                <span id="user-id-value">{{ user_id }}</span>
+            </div>
+            <button class="refresh-button" id="refresh-id" title="Rafraîchir l'ID">
+                <i class="fas fa-sync-alt"></i>
+            </button>
+        </div>
+        <div class="input-group">
+            <input type="text" id="recipient-id" placeholder="ID du correspondant">
+        </div>
+        <button class="beep-button" id="beep-button">
+            <i class="fas fa-paper-plane"></i> Beep !
+        </button>
+    </div>
+    <div class="cookie-banner" id="cookie-banner">
+        <p>Ce site utilise des cookies pour stocker votre ID.</p>
+        <button id="accept-cookie">Accepter</button>
+    </div>
+
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <script>
+        const socket = io();
+        const beepButton = document.getElementById('beep-button');
+        const recipientIdInput = document.getElementById('recipient-id');
+        const userIdSpan = document.getElementById('user-id-value');
+        const refreshButton = document.getElementById('refresh-id');
+        const cookieBanner = document.getElementById('cookie-banner');
+        const acceptCookieButton = document.getElementById('accept-cookie');
+
+        if (!localStorage.getItem('cookiesAccepted')) {
+            cookieBanner.style.display = 'flex';
+        }
+
+        acceptCookieButton.addEventListener('click', () => {
+            localStorage.setItem('cookiesAccepted', 'true');
+            cookieBanner.style.display = 'none';
+        });
+
+        function generateRandomId() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            let newId = '';
+            for (let i = 0; i < 8; i++) {
+                newId += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return newId;
+        }
+
+        refreshButton.addEventListener('click', () => {
+            const newId = generateRandomId();
+            userIdSpan.textContent = newId;
+            document.cookie = `user_id=${newId}; max-age=${365 * 24 * 60 * 60}; path=/`;
+            alert(`Votre nouvel ID est : ${newId}`);
+            window.location.reload();
+        });
+
+        let isBeeping = false;
+        let beepStartTime = 0;
+
+        function playBeep(duration) {
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            oscillator.type = 'sine';
+            oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+            oscillator.connect(audioContext.destination);
+            oscillator.start();
+            oscillator.stop(audioContext.currentTime + duration / 1000);
+        }
+
+        beepButton.addEventListener('mousedown', startBeep);
+        beepButton.addEventListener('mouseup', endBeep);
+        beepButton.addEventListener('touchstart', startBeep, { passive: true });
+        beepButton.addEventListener('touchend', endBeep, { passive: true });
+
+        function startBeep(e) {
+            e.preventDefault();
+            isBeeping = true;
+            beepStartTime = Date.now();
+            beepButton.classList.add('active');
+        }
+
+        function endBeep(e) {
+            e.preventDefault();
+            if (isBeeping) {
+                const beepDuration = (Date.now() - beepStartTime) / 1000;
+                const recipientId = recipientIdInput.value.trim();
+                if (recipientId) {
+                    socket.emit('send_beep', {
+                        recipient_id: recipientId,
+                        duration: beepDuration
+                    });
+                }
+                beepButton.classList.remove('active');
+                isBeeping = false;
+            }
+        }
+
+        socket.on('receive_beep', (data) => {
+            const duration = data.duration * 1000;
+            playBeep(duration);
+            animateBeep();
+        });
+
+        function animateBeep() {
+            beepButton.classList.add('received');
+            setTimeout(() => {
+                beepButton.classList.remove('received');
+            }, 500);
+        }
+    </script>
+   <!-- Ajout de la mention -->
+    <footer class="footer">
+	<br>Sur une idée de <a href="https://damballah.fr" target="_blank">Damballah</a>, créé avec <a href="https://chat.mistral.ai/" target="_blank">Mistral AI</a>
+    </footer>
+</body>
+</html>
