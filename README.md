@@ -35,10 +35,47 @@
 
 ---
 
-## 🚀 Installation
+## 🚀 Installation et lancement
 
 ### 1. Cloner le dépôt
 
 ```bash
 git clone https://github.com/votre-utilisateur/beep-talkie.git
 cd beep-talkie
+```
+
+## 2. Installer des dépendences
+```bash
+pip install flask flask-socketio eventlet
+```
+
+## 3. Démarrer le serveur
+```bash
+python app.py
+```
+## 4. Accéder à l'application
+Ouvrir http://localhost:5000 dans votre navigateur
+
+## 🌐 Utilisation
+1. Votre identifiant unique s'affiche automatiquement à l'écran
+2. Partagez cet identifiant avec votre correspondant
+3. Entrez l'identifiant de votre correspondant dans le champ prévu
+4. Appuyez sur le bouton "Beep!" pour envoyer un signal sonore
+
+## 📁 Structure du Projet
+beep-talkie/ <br>
+├── app.py              # Code serveur Flask <br>
+├── templates/ <br>
+│   └── index.html      # Interface utilisateur <br>
+├── static/ <br>
+│   └── styles.css      # Feuille de style <br>
+└── README.md           # Documentation <br>
+
+## ⚠️ Limitations Connues
+Certains navigateurs bloquent les sons automatiques <br>
+→ Solution : Interagir avec la page avant d'envoyer un beep et vérifier que les WebSockets ne sont pas bloqués par un pare-feu <br>
+
+## 📄 Licence
+Ce projet est sous licence MIT.
+
+
